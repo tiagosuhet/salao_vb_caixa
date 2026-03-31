@@ -7,10 +7,10 @@
   --muted: rgba(255, 255, 255, 0.7);
   --balance: #ff1fae;
   --balance-soft: rgba(255, 31, 174, 0.22);
-  --entry: #ff74cf;
-  --entry-soft: rgba(255, 116, 207, 0.16);
-  --exit: #ffffff;
-  --exit-soft: rgba(255, 255, 255, 0.1);
+  --entry: #2dd36f;
+  --entry-soft: rgba(45, 211, 111, 0.18);
+  --exit: #ff4d5f;
+  --exit-soft: rgba(255, 77, 95, 0.18);
   --neutral: #ffffff;
   --neutral-soft: rgba(255, 255, 255, 0.08);
   --shadow: 0 24px 60px rgba(0, 0, 0, 0.48);
@@ -331,11 +331,11 @@ button:hover {
 }
 
 .action-entry {
-  background: linear-gradient(160deg, rgba(255, 116, 207, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
+  background: linear-gradient(160deg, rgba(45, 211, 111, 0.2) 0%, rgba(255, 255, 255, 0.03) 100%);
 }
 
 .action-exit {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 31, 174, 0.08) 100%);
+  background: linear-gradient(160deg, rgba(255, 77, 95, 0.24) 0%, rgba(255, 255, 255, 0.03) 100%);
 }
 
 .action-balance {
@@ -601,12 +601,12 @@ button:hover {
 }
 
 .pill-entrada {
-  background: rgba(255, 116, 207, 0.16);
+  background: rgba(45, 211, 111, 0.16);
   color: var(--entry);
 }
 
 .pill-saida {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 77, 95, 0.16);
   color: var(--exit);
 }
 
@@ -715,6 +715,18 @@ textarea:focus {
   color: var(--ink);
 }
 
+.toggle-entry input:checked + span {
+  border-color: rgba(45, 211, 111, 0.5);
+  background: rgba(45, 211, 111, 0.18);
+  color: var(--ink);
+}
+
+.toggle-exit input:checked + span {
+  border-color: rgba(255, 77, 95, 0.5);
+  background: rgba(255, 77, 95, 0.18);
+  color: var(--ink);
+}
+
 .payment-card input:checked + span {
   border-color: rgba(255, 255, 255, 0.28);
   background: rgba(255, 255, 255, 0.08);
@@ -762,7 +774,7 @@ button,
 }
 
 .danger-btn {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 77, 95, 0.12);
   color: var(--exit);
 }
 
