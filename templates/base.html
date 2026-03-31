@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Caixa do Salao{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="{{ body_class or '' }}">
+  <div class="page-glow page-glow-left"></div>
+  <div class="page-glow page-glow-right"></div>
+
+  {% if session.get('user_id') %}
+  <header class="topbar shell">
+    <a href="{{ url_for('index') }}" class="brand">
+      <span class="brand-mark">CS</span>
+      <div>
+        <span class="eyebrow">Operacao rapida</span>
+        <strong>Caixa do Salao</strong>
+      </div>
+    </a>
+
+    <nav class="topnav">
+      <a href="{{ url_for('index') }}" class="{{ 'is-current' if active_page == 'dashboard' else '' }}">Painel</a>
+      <a href="{{ url_for('new_transaction') }}" class="{{ 'is-current' if active_page == 'new_transaction' else '' }}">Lancar</a>
+      <a href="{{ url_for('history') }}" class="{{ 'is-current' if active_page == 'history' else '' }}">Historico</a>
+      <a href="{{ url_for('close_cash_view') }}" class="{{ 'is-current' if active_page == 'close_cash' else '' }}">Fechar caixa</a>
+    </nav>
+
+    <div class="session-chip">
+      <div>
+        <span class="muted-label">Logado como</span>
+        <strong>{{ session.get('user_email') }}</strong>
+      </div>
+      <form method="post" action="{{ url_for('logout') }}">
+        <button type="submit" class="ghost-btn">Sair</button>
+      </form>
+    </div>
+  </header>
+  {% endif %}
+
+  <main class="shell page-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <section class="flash-stack">
+      {% for category, message in messages %}
+      <div class="flash flash-{{ category or 'info' }}" data-autohide>
+        <span>{{ message }}</span>
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>

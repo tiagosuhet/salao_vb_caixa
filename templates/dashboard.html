@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Painel | Caixa do Salao{% endblock %}
+
+{% block content %}
+<section class="hero card">
+  <div class="hero-copy">
+    <span class="eyebrow">Fluxo principal</span>
+    <h1>Caixa rapido para registrar em segundos</h1>
+    <p>Abra, toque em uma acao grande e registre a movimentacao sem ficar procurando informacao na tela.</p>
+  </div>
+  <div class="hero-meta">
+    <span class="meta-kicker">Hoje</span>
+    <strong>{{ today|datetime_br }}</strong>
+    <span class="meta-hint">Saldo total atualizado em tempo real</span>
+  </div>
+</section>
+
+<section class="metrics-grid">
+  <article class="metric-card metric-balance">
+    <span class="metric-label">Saldo atual</span>
+    <strong>{{ overall_summary.balance|money }}</strong>
+    <small>Entradas: {{ overall_summary.total_entries|money }} | Saidas: {{ overall_summary.total_exits|money }}</small>
+  </article>
+  <article class="metric-card metric-entry">
+    <span class="metric-label">Entradas de hoje</span>
+    <strong>{{ today_summary.total_entries|money }}</strong>
+    <small>{{ today_summary.transaction_count }} lancamentos no dia</small>
+  </article>
+  <article class="metric-card metric-exit">
+    <span class="metric-label">Saidas de hoje</span>
+    <strong>{{ today_summary.total_exits|money }}</strong>
+    <small>Impacto no caixa do dia</small>
+  </article>
+  <article class="metric-card metric-neutral">
+    <span class="metric-label">Saldo do mes</span>
+    <strong>{{ month_summary.balance|money }}</strong>
+    <small>Acumulado desde o primeiro dia do mes</small>
+  </article>
+</section>
+
+<section class="action-grid">
+  <a href="{{ url_for('new_transaction', type='entrada') }}" class="action-card action-entry">
+    <span class="action-tag">Rapido</span>
+    <strong>Registrar entrada</strong>
+    <p>Venda, servico ou recebimento.</p>
+  </a>
+  <a href="{{ url_for('new_transaction', type='saida') }}" class="action-card action-exit">
+    <span class="action-tag">Rapido</span>
+    <strong>Registrar saida</strong>
+    <p>Compra, despesa ou pagamento.</p>
+  </a>
+  <a href="{{ url_for('history') }}" class="action-card action-balance">
+    <span class="action-tag">Resumo</span>
+    <strong>Ver saldo</strong>
+    <p>Confira totais, filtros e movimentacoes.</p>
+  </a>
+  <a href="{{ url_for('history') }}" class="action-card action-history">
+    <span class="action-tag">Consulta</span>
+    <strong>Historico</strong>
+    <p>Edite, filtre e revise registros do dia.</p>
+  </a>
+  <a href="{{ url_for('close_cash_view') }}" class="action-card action-close">
+    <span class="action-tag">Opcional</span>
+    <strong>Fechar caixa</strong>
+    <p>Salve um fechamento rapido do dia.</p>
+  </a>
+</section>
+
+<section class="bi-grid">
+  <article class="card section-card bi-card bi-card-wide">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">BI do caixa</span>
+        <h2>Fluxo dos ultimos 14 dias</h2>
+      </div>
+      <span class="chart-range">{{ dashboard_start|datetime_br }} ate {{ today|datetime_br }}</span>
+    </div>
+    <div class="chart-shell chart-shell-tall" data-bi-chart="line" data-source="dashboard-flow-chart"></div>
+    <div class="chart-legend">
+      <span><i class="legend-dot legend-entry"></i>Entradas</span>
+      <span><i class="legend-dot legend-exit"></i>Saidas</span>
+    </div>
+  </article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="card section-card">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Movimentacoes do dia</span>
+        <h2>Ultimos lancamentos</h2>
+      </div>
+      <a href="{{ url_for('history') }}" class="inline-link">Ver historico completo</a>
+    </div>
+
+    <div class="transaction-list">
+      {% for item in today_transactions %}
+      <article class="transaction-row">
+        <div>
+          <span class="pill pill-{{ item.transaction_type }}">{{ item.transaction_type|transaction_label }}</span>
+          <strong>{{ item.category_name }}</strong>
+          <p>{{ item.description or 'Sem observacao' }}</p>
+        </div>
+        <div class="transaction-meta">
+          <strong>{{ item.amount_cents|money }}</strong>
+          <span>{{ item.occurred_at|datetime_br }}</span>
+          <small>{{ item.payment_method }}</small>
+        </div>
+      </article>
+      {% else %}
+      <div class="empty-state">
+        <strong>Nenhum lancamento hoje.</strong>
+        <p>Use os botoes acima para registrar a primeira entrada ou saida do dia.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </article>
+
+  <aside class="stack-col">
+    <article class="card section-card">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">BI do mes</span>
+          <h2>Mix de pagamentos</h2>
+        </div>
+      </div>
+      <div class="chart-shell chart-shell-compact" data-bi-chart="donut" data-source="dashboard-payment-chart"></div>
+      <div class="mini-list">
+        {% for item in payment_breakdown %}
+        <div class="mini-row">
+          <div>
+            <strong>{{ item.payment_method }}</strong>
+            <small>{{ item.usage_count }} uso(s)</small>
+          </div>
+          <span>{{ item.total_cents|money }}</span>
+        </div>
+        {% else %}
+        <p class="muted-copy">Ainda nao ha dados suficientes neste mes.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="card section-card">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">BI do mes</span>
+          <h2>Saidas por categoria</h2>
+        </div>
+      </div>
+      <div class="chart-shell chart-shell-compact" data-bi-chart="bar" data-source="dashboard-category-chart"></div>
+      <div class="mini-list">
+        {% for item in category_breakdown %}
+        <div class="mini-row">
+          <div>
+            <strong>{{ item.category_name }}</strong>
+            <small>Mes atual</small>
+          </div>
+          <span>{{ item.total_cents|money }}</span>
+        </div>
+        {% else %}
+        <p class="muted-copy">Nenhuma saida cadastrada no periodo atual.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="card section-card accent-card">
+      <span class="eyebrow">Fechamento</span>
+      <h2>Ultimo caixa salvo</h2>
+      {% if last_closing %}
+      <strong>{{ last_closing.balance_cents|money }}</strong>
+      <p>Fechado em {{ last_closing.closed_at|datetime_br }} por {{ last_closing.closed_by }}</p>
+      <small>Entradas {{ last_closing.total_entries_cents|money }} | Saidas {{ last_closing.total_exits_cents|money }}</small>
+      {% else %}
+      <strong>Sem fechamento</strong>
+      <p>O fechamento eh opcional e pode ser feito no fim do expediente.</p>
+      {% endif %}
+    </article>
+  </aside>
+</section>
+
+<script type="application/json" id="dashboard-flow-chart">
+  {{ {
+    'points': dashboard_flow,
+    'series': [
+      {'key': 'entries_cents', 'label': 'Entradas', 'color': '#ff74cf'},
+      {'key': 'exits_cents', 'label': 'Saidas', 'color': '#ffffff'}
+    ]
+  }|tojson }}
+</script>
+<script type="application/json" id="dashboard-payment-chart">
+  {{ {
+    'items': payment_breakdown,
+    'label_key': 'payment_method',
+    'value_key': 'total_cents',
+    'colors': ['#ff1fae', '#ff74cf', '#ffffff', '#8f0055']
+  }|tojson }}
+</script>
+<script type="application/json" id="dashboard-category-chart">
+  {{ {
+    'items': category_breakdown,
+    'label_key': 'category_name',
+    'value_key': 'total_cents',
+    'color': '#ff1fae'
+  }|tojson }}
+</script>
+{% endblock %}

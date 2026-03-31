@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acesso | Caixa do Salao</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="auth-body">
+  <div class="page-glow page-glow-left"></div>
+  <div class="page-glow page-glow-right"></div>
+
+  <main class="auth-shell">
+    <section class="auth-panel">
+      <article class="auth-copy card">
+        <span class="eyebrow">Caixa do salao</span>
+        <h1>Controle financeiro simples para a rotina do atendimento</h1>
+        <p>Registre entrada, saida, saldo e historico com poucos toques. Ideal para celular, tablet ou computador no caixa.</p>
+        <div class="mini-list">
+          <div class="mini-row">
+            <div>
+              <strong>Fluxo curto</strong>
+              <small>Registrar em menos de 10 segundos</small>
+            </div>
+          </div>
+          <div class="mini-row">
+            <div>
+              <strong>Historico legivel</strong>
+              <small>Cartoes claros em vez de tabelas apertadas</small>
+            </div>
+          </div>
+          <div class="mini-row">
+            <div>
+              <strong>Saldo imediato</strong>
+              <small>Atualizacao assim que o lancamento eh salvo</small>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <section class="auth-forms">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+          <div class="flash flash-{{ category or 'info' }}">
+            <span>{{ message }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="auth-grid">
+          <form method="post" action="{{ url_for('login_post') }}" class="card auth-card">
+            <span class="eyebrow">Acesso</span>
+            <h2>Entrar</h2>
+            <label class="field-block">
+              <span>E-mail</span>
+              <input type="email" name="email" required placeholder="voce@salao.com" />
+            </label>
+            <label class="field-block">
+              <span>Senha</span>
+              <input type="password" name="password" required placeholder="Sua senha" />
+            </label>
+            <button type="submit" class="primary-btn">Entrar no caixa</button>
+          </form>
+
+          <form method="post" action="{{ url_for('register') }}" class="card auth-card">
+            <span class="eyebrow">Primeiro acesso</span>
+            <h2>Criar conta</h2>
+            <label class="field-block">
+              <span>E-mail</span>
+              <input type="email" name="email" required placeholder="voce@salao.com" />
+            </label>
+            <label class="field-block">
+              <span>Senha</span>
+              <input type="password" name="password" minlength="6" required placeholder="Minimo de 6 caracteres" />
+            </label>
+            <button type="submit" class="primary-btn">Cadastrar</button>
+          </form>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

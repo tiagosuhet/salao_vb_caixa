@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Fechar Caixa | Caixa do Salao{% endblock %}
+
+{% block content %}
+<section class="form-layout">
+  <article class="card form-card">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Fechamento opcional</span>
+        <h1>Consolidar o caixa do dia</h1>
+      </div>
+      <p class="muted-copy">Salva um retrato rapido do dia sem travar a operacao normal do sistema.</p>
+    </div>
+
+    <div class="metrics-grid single-line">
+      <article class="metric-card metric-entry">
+        <span class="metric-label">Entradas de hoje</span>
+        <strong>{{ today_summary.total_entries|money }}</strong>
+      </article>
+      <article class="metric-card metric-exit">
+        <span class="metric-label">Saidas de hoje</span>
+        <strong>{{ today_summary.total_exits|money }}</strong>
+      </article>
+      <article class="metric-card metric-balance">
+        <span class="metric-label">Saldo de hoje</span>
+        <strong>{{ today_summary.balance|money }}</strong>
+      </article>
+    </div>
+
+    <form method="post" action="{{ url_for('close_cash') }}" class="transaction-form">
+      <label class="field-block">
+        <span>Observacao (opcional)</span>
+        <textarea name="note" rows="4" placeholder="Ex.: caixa conferido antes do encerramento.">{{ last_closing.note if last_closing else '' }}</textarea>
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" class="primary-btn">Fechar caixa agora</button>
+        <a href="{{ url_for('index') }}" class="ghost-btn large-link">Voltar ao painel</a>
+      </div>
+    </form>
+  </article>
+
+  <aside class="stack-col">
+    <article class="card section-card accent-card">
+      <span class="eyebrow">Data de referencia</span>
+      <h2>{{ today }}</h2>
+      <p>Se ja existir um fechamento para hoje, o sistema atualiza esse resumo em vez de criar duplicidade.</p>
+    </article>
+
+    <article class="card section-card">
+      <span class="eyebrow">Ultimo fechamento de hoje</span>
+      {% if last_closing %}
+      <h2>{{ last_closing.closed_at|datetime_br }}</h2>
+      <p>{{ last_closing.balance_cents|money }} fechado por {{ last_closing.closed_by }}</p>
+      <small>{{ last_closing.note or 'Sem observacao registrada.' }}</small>
+      {% else %}
+      <h2>Ainda nao fechado</h2>
+      <p>Nenhum fechamento salvo para hoje. O uso continua normal mesmo sem esta etapa.</p>
+      {% endif %}
+    </article>
+  </aside>
+</section>
+{% endblock %}

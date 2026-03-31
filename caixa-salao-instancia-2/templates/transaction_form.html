@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}{{ heading }} | Caixa do Salao{% endblock %}
+
+{% block content %}
+<section class="form-layout">
+  <article class="card form-card">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Lancamento rapido</span>
+        <h1>{{ heading }}</h1>
+      </div>
+      <p class="muted-copy">Poucos campos, valor numerico e horario automatico para evitar erro.</p>
+    </div>
+
+    <form method="post" action="{{ action_url }}" class="transaction-form">
+      <div class="toggle-grid">
+        {% for option in ['entrada', 'saida'] %}
+        <label class="toggle-card">
+          <input type="radio" name="transaction_type" value="{{ option }}" {{ 'checked' if current_type == option else '' }} />
+          <span>{{ option|transaction_label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+      <label class="field-block">
+        <span>Valor</span>
+        <input
+          type="number"
+          name="amount"
+          step="0.01"
+          min="0.01"
+          inputmode="decimal"
+          placeholder="0,00"
+          value="{{ transaction.amount_input if transaction else '' }}"
+          data-autofocus-amount
+          required
+        />
+      </label>
+
+      <div class="form-two-col">
+        <label class="field-block">
+          <span>Categoria</span>
+          <select
+            name="category_id"
+            required
+            data-category-select
+            data-current="{{ transaction.category_id if transaction else '' }}"
+          ></select>
+        </label>
+
+        <fieldset class="field-block radio-set">
+          <legend>Forma de pagamento</legend>
+          <div class="payment-grid">
+            {% for option in payment_methods %}
+            <label class="payment-card">
+              <input type="radio" name="payment_method" value="{{ option }}" {{ 'checked' if transaction.payment_method == option else '' }} required />
+              <span>{{ option }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      <label class="field-block">
+        <span>Descricao (opcional)</span>
+        <input
+          type="text"
+          name="description"
+          maxlength="180"
+          placeholder="Ex.: corte + finalizacao"
+          value="{{ transaction.description if transaction else '' }}"
+        />
+      </label>
+
+      <label class="field-block">
+        <span>Data e hora</span>
+        <input type="text" value="{{ occurred_at_display }}" readonly />
+      </label>
+      <input type="hidden" name="occurred_at" value="{{ occurred_at_raw }}" />
+
+      <div class="form-actions">
+        <button type="submit" class="primary-btn">{{ submit_label }}</button>
+        <a href="{{ url_for('index') }}" class="ghost-btn large-link">Voltar ao painel</a>
+      </div>
+    </form>
+  </article>
+
+  <aside class="stack-col">
+    <article class="card section-card accent-card">
+      <span class="eyebrow">Boas praticas</span>
+      <h2>Fluxo em menos de 10 segundos</h2>
+      <p>O tipo define as categorias, o valor usa teclado numerico e o horario entra automaticamente.</p>
+    </article>
+
+    <article class="card section-card">
+      <span class="eyebrow">Operacao</span>
+      <h2>{{ 'Correcao de registro' if is_edit else 'Registro direto no caixa' }}</h2>
+      <p class="muted-copy">
+        {% if is_edit %}
+        Se o lancamento foi registrado errado, ajuste os dados e salve. O saldo sera recalculado na hora.
+        {% else %}
+        Salve e volte para o painel com confirmacao visual e saldo atualizado imediatamente.
+        {% endif %}
+      </p>
+    </article>
+  </aside>
+</section>
+
+<script type="application/json" id="categories-data">{{ categories_map|tojson }}</script>
+{% endblock %}
