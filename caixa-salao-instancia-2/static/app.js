@@ -9,9 +9,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoriesDataNode = document.getElementById("categories-data");
   const categorySelect = document.querySelector("[data-category-select]");
   const typeInputs = document.querySelectorAll("input[name='transaction_type']");
+  const submitButton = document.querySelector("[data-transaction-submit]");
 
   if (categoriesDataNode && categorySelect && typeInputs.length > 0) {
     const categoriesByType = JSON.parse(categoriesDataNode.textContent);
+    const syncSubmitButton = (selectedType) => {
+      if (!submitButton) {
+        return;
+      }
+      submitButton.classList.remove("is-entry", "is-exit");
+      submitButton.classList.add(selectedType === "saida" ? "is-exit" : "is-entry");
+    };
+
     const buildOptions = (selectedType, preferredValue) => {
       const items = categoriesByType[selectedType] || [];
       categorySelect.innerHTML = "";
@@ -36,10 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedTypeInput = Array.from(typeInputs).find((input) => input.checked);
     const initialType = selectedTypeInput ? selectedTypeInput.value : "entrada";
     buildOptions(initialType, currentSelected);
+    syncSubmitButton(initialType);
 
     typeInputs.forEach((input) => {
       input.addEventListener("change", () => {
         buildOptions(input.value, "");
+        syncSubmitButton(input.value);
       });
     });
   }

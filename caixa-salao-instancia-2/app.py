@@ -17,12 +17,12 @@ BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = BASE_DIR / "work_orders.db"
 APP_TZ = ZoneInfo("America/Sao_Paulo")
 EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
-PAYMENT_METHODS = ["Dinheiro", "Pix", "Cartao", "Transferencia"]
+PAYMENT_METHODS = ["Dinheiro", "Pix", "Cartão", "Transferência"]
 CATEGORY_PRESETS = {
     "entrada": [
         "Corte",
         "Escova",
-        "Coloracao",
+        "Coloração",
         "Manicure",
         "Pedicure",
         "Sobrancelha",

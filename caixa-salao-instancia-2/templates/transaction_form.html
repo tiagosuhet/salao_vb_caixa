@@ -16,7 +16,7 @@
     <form method="post" action="{{ action_url }}" class="transaction-form">
       <div class="toggle-grid">
         {% for option in ['entrada', 'saida'] %}
-        <label class="toggle-card">
+        <label class="toggle-card {{ 'toggle-entry' if option == 'entrada' else 'toggle-exit' }}">
           <input type="radio" name="transaction_type" value="{{ option }}" {{ 'checked' if current_type == option else '' }} />
           <span>{{ option|transaction_label }}</span>
         </label>
@@ -80,7 +80,7 @@
       <input type="hidden" name="occurred_at" value="{{ occurred_at_raw }}" />
 
       <div class="form-actions">
-        <button type="submit" class="primary-btn">{{ submit_label }}</button>
+        <button type="submit" class="primary-btn" data-transaction-submit>{{ submit_label }}</button>
         <a href="{{ url_for('index') }}" class="ghost-btn large-link">Voltar ao painel</a>
       </div>
     </form>
