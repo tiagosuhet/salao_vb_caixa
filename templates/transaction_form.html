@@ -80,7 +80,7 @@
       <input type="hidden" name="occurred_at" value="{{ occurred_at_raw }}" />
 
       <div class="form-actions">
-        <button type="submit" class="primary-btn">{{ submit_label }}</button>
+        <button type="submit" class="primary-btn" data-transaction-submit>{{ submit_label }}</button>
         <a href="{{ url_for('index') }}" class="ghost-btn large-link">Voltar ao painel</a>
       </div>
     </form>
