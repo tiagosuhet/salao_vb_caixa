@@ -35,7 +35,7 @@ CATEGORY_PRESETS = {
         "Material",
         "Comissao",
         "Aluguel",
-        "Agua e luz",
+        "Água e luz",
         "Manutencão",
         "Marketing",
         "Impostos",
