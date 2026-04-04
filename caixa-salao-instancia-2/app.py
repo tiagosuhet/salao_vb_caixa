@@ -33,9 +33,9 @@ CATEGORY_PRESETS = {
     "saida": [
         "Produtos",
         "Material",
-        "Comissao",
+        "Comissão",
         "Aluguel",
-        "Agua e luz",
+        "Água e luz",
         "Manutencão",
         "Marketing",
         "Impostos",
