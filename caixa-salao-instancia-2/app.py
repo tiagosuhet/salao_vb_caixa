@@ -36,7 +36,7 @@ CATEGORY_PRESETS = {
         "Comissao",
         "Aluguel",
         "Agua e luz",
-        "Manutencao",
+        "Manutencão",
         "Marketing",
         "Impostos",
         "Outros",
