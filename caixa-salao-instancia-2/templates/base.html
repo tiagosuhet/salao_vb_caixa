@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}Caixa do Salão{% endblock %}</title>
+  <title>{% block title %}Caixa do Salao{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body class="{{ body_class or '' }}">
@@ -13,10 +13,14 @@
   {% if session.get('user_id') %}
   <header class="topbar shell">
     <a href="{{ url_for('index') }}" class="brand">
-      <span class="brand-mark">CS</span>
-      <div>
-        <!-- <span class="eyebrow">Operação rapida</span> -->
-        <strong>Caixa do Salão</strong>
+      <img
+        src="{{ url_for('static', filename='logo_valeria_barbara.png') }}"
+        alt="Valeria Barbara Salao de Beleza"
+        class="brand-logo"
+      />
+      <div class="brand-copy">
+        <span class="eyebrow">Operacao rapida</span>
+        <strong>Caixa do Salao</strong>
       </div>
     </a>
 

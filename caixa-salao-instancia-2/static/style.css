@@ -103,19 +103,25 @@ body::before {
   gap: 12px;
   color: inherit;
   text-decoration: none;
+  min-width: 0;
 }
 
-.brand-mark {
+.brand-logo {
+  display: block;
+  width: auto;
+  height: 56px;
+  max-width: 210px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-copy {
   display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--balance) 0%, #8f0055 100%);
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+  min-width: 0;
+}
+
+.brand-copy strong {
+  font-size: 18px;
 }
 
 .topnav {
@@ -999,6 +1005,11 @@ button,
   .shell,
   .auth-shell {
     width: min(100% - 20px, 1180px);
+  }
+
+  .brand-logo {
+    height: 46px;
+    max-width: 170px;
   }
 
   .card,
